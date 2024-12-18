@@ -1,0 +1,15 @@
+---
+docker_remove_old_versions:
+  - docker
+  - docker-engine
+  - docker.io
+  - containerd
+  - runc
+
+docker_gpg_key_url: https://download.docker.com/linux/ubuntu/gpg
+docker_repo_url: deb https://download.docker.com/linux/ubuntu focal stable
+docker_package_name: docker-ce
+docker_repo_state: present
+
+docker_service_state: started
+docker_service_enabled: yes

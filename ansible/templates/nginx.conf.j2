@@ -1,0 +1,51 @@
+user  {{ nginx_user }};
+worker_processes  {{ nginx_worker_processes }};
+include /usr/share/nginx/modules/*.conf;
+
+events {
+    worker_connections {{ nginx_worker_connections }};
+}
+
+http {
+    include       /etc/nginx/mime.types;
+    default_type  application/octet-stream;
+
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+    keepalive_timeout  65;
+
+    reset_timedout_connection  on;
+    client_body_timeout        35;
+    send_timeout               30;
+
+    types_hash_max_size 2048;
+    proxy_buffer_size   64k;
+    proxy_buffers   4 64k;
+    proxy_busy_buffers_size   64k;
+    server_names_hash_bucket_size 64;
+
+    server {
+        listen 80;
+        server_name _;
+
+        location /static/ {
+            root {{ static_files_root }};
+            try_files $uri $uri/ =404;
+        }
+
+        location / {
+            proxy_pass http://app_servers;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
+
+    upstream app_servers {
+        {% for host in groups['app'] %}
+        server {{ host }}:8000;
+        {% endfor %}
+    }
+}

@@ -1,0 +1,29 @@
+- name: Remove old docker installs
+  apt:
+    name:
+      - "{{ item }}"
+    state: absent
+  with_items: "{{ docker_remove_old_versions }}"
+  when: docker_remove_old_versions | length > 0
+
+- name: Add Docker GPG key
+  apt_key:
+    url: "{{ docker_gpg_key_url }}"
+    state: present
+
+- name: Add Docker repository
+  apt_repository:
+    repo: "{{ docker_repo_url }}"
+    state: "{{ docker_repo_state }}"
+
+- name: Update apt and install Docker
+  apt:
+    update_cache: yes
+    name: "{{ docker_package_name }}"
+    state: present
+
+- name: Ensure Docker service is running
+  service:
+    name: docker
+    state: "{{ docker_service_state }}"
+    enabled: "{{ docker_service_enabled }}"

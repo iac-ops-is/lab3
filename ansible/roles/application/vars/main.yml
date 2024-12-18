@@ -1,0 +1,3 @@
+application_image: "timurbabs/django"
+application_internal_port: 8000
+application_external_port: 8000
