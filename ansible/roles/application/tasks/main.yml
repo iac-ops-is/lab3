@@ -1,0 +1,13 @@
+- name: pull applicaction image
+  docker_image:
+    name: "{{ application_image }}"
+    source: pull
+
+- name: redeploy application
+  docker_container:
+    name: app
+    image: "{{ application_image }}"
+    state: started
+    ports:
+      - "{{ application_external_port }}:{{ application_internal_port }}"
+    recreate: yes

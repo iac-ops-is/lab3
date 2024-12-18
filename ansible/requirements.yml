@@ -1,0 +1,9 @@
+roles:
+  - name: iac-ops-is.docker
+    src: https://github.com/iac-ops-is/Docker.git
+    version: main
+    scm: git
+  - name: iac-ops-is.nginx
+    src: https://gitlab.com/vamosops/Nginx.git
+    version: main
+    scm: git
