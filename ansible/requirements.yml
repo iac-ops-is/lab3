@@ -4,6 +4,6 @@ roles:
     version: main
     scm: git
   - name: iac-ops-is.nginx
-    src: https://gitlab.com/vamosops/Nginx.git
-    version: main
+    src: https://github.com/iac-ops-is/Nginx.git
+    version: master
     scm: git
