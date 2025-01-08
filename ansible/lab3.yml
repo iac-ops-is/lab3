@@ -4,10 +4,19 @@
     - iac-ops-is.nginx 
   become: yes
   vars:
+    repo_url: https://github.com/mdn/django-locallibrary-tutorial
+    repo_path: /home/{{ ansible_ssh_user }}/django-locallibrary-tutorial
     static_files_root: "{{ repo_path }}/catalog/"
     proxy_pass_target: app_servers
-    nginx_template_path: "{{ playbook_dir }}/inventory/templates/nginx.conf.j2"
+    nginx_template_path: "{{ playbook_dir }}/templates/nginx.conf.j2"
 
+  # результат сломанной статики приложения 
+  tasks:
+    - name: Clone the Django Local Library repository
+      git:
+        repo: "{{ repo_url }}"
+        dest: "{{ repo_path }}"
+  
 - name: Start Application
   hosts: app
   roles: 

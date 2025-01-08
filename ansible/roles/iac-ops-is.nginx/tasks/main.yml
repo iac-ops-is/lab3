@@ -1,0 +1,30 @@
+- name: Allow all access to tcp port 80
+  ufw:
+    rule: allow
+    port: 80
+    proto: tcp
+
+- name: Install nginx
+  apt:
+    name: nginx
+    state: present
+    update_cache: yes
+    
+- name: replace conf
+  ansible.builtin.template: 
+    src: "{{ nginx_template_path }}"
+    dest: /etc/nginx/nginx.conf
+  notify:
+    - Restart Nginx
+
+- name: validate conf
+  ansible.builtin.shell: 
+    cmd: /usr/sbin/nginx -t -c /etc/nginx/nginx.conf
+  register: validate_result
+  failed_when: validate_result.rc != 0
+
+- name: Start Nginx service
+  service:
+    name: nginx
+    state: started
+    enabled: yes

@@ -1,10 +1,10 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/focal64"
 
-  SERVERS = 2
+  SERVERS = 1
   BRIDGE = "en0: Wi-Fi (Wireless)"
 
-  ssh_key = File.read(File.expand_path("C:\\Users\\maks9\\.ssh\\ansible_key.pub")).strip
+  ssh_key = File.read(File.expand_path("C:\\Users\\xvsvg\\.ssh\\ansible_key.pub")).strip
 
   def create_host(config, hostname, ip, ssh_key)
     config.vm.define hostname do |host|

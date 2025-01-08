@@ -1,0 +1,30 @@
+user  {{ nginx_user }};
+worker_processes  {{ nginx_worker_processes }};
+include /usr/share/nginx/modules/*.conf;
+pid /run/nginx.pid;
+
+events {
+    worker_connections {{ nginx_worker_connections }};
+}
+
+http {
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+    keepalive_timeout 65;
+    reset_timedout_connection  on;
+    client_body_timeout        35;
+    send_timeout               30;
+
+    types_hash_max_size 2048;
+    proxy_buffer_size   64k;
+    proxy_buffers   4 64k;
+    proxy_busy_buffers_size   64k;
+    server_names_hash_bucket_size 64;
+
+    include /usr/share/nginx/modules/*.conf;
+    include /etc/nginx/conf.d/*.conf;
+    include /etc/nginx/sites-enabled/*;
+}
